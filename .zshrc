@@ -102,3 +102,15 @@ source $ZSH/oh-my-zsh.sh
 source /usr/share/powerlevel9k/powerlevel9k.zsh-theme
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Disable globbing on the remote path.
+alias scp='noglob scp_wrap'
+function scp_wrap {
+  local -a args
+  local i
+  for i in "$@"; do case $i in
+    (*:*) args+=($i) ;;
+    (*) args+=(${~i}) ;;
+  esac; done
+  command scp "${(@)args}"
+}
